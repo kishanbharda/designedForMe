@@ -1,0 +1,141 @@
+<section id="bestOffer">
+		<div class="container">
+			<div class="row" style="border:2px solid rgb(195,195,195)">
+				<div class="col-md-3">
+					<div class="panel" style="margin-top:50%;">
+						<h1> <center>Best Offer</center></h1>
+						<p style="margin:20px">BEST OFFER FOR OURS CUSTOMERS.THIS PRODUCTS HAS MAXIMUM DISCOUNT ON THAT PRICE.</p>
+					</div>
+				</div>
+				<%
+							
+							ResultSet rsB=table.show("Select * from product where QUANTITY>0");
+							while(rsB.next())
+							{
+								if((100*rsB.getInt(8))/rsB.getInt(7)>10)
+								{
+								%>
+						<div class="col-md-3" style="margin-top:40px;">
+							<div class="panel panel-primary">
+								<div class="panel-heading" style="height:100px">
+									<h3><%= rsB.getString(2) %></h3>
+								</div>
+								<div class="panel-body">
+									<a href="productDetail.jsp?id=<%= rsB.getInt(1) %>"><center><img class="img img-responsive thumbnail" src="images/product/<%= rsB.getString(10) %>" style="height:200px"/></center></a>
+									<div class="panel" style="height:40px">
+										<%
+											if(rsB.getInt(8)!=0)
+											{
+												%>
+												<h4><span style="color:rgb(0,0,200)">Price : </span><strike style="color:red">Rs.<%= rsB.getInt(7) %></strike>&nbsp;<span style="color:rgb(0,200,0)">Rs.<%=  rsB.getInt(7)-rsB.getInt(8) %></span></h4>
+												</h3><span style="color:rgb(46,4,170)"><%= (100*rsB.getInt(8))/rsB.getInt(7) %>% off</span></h3>
+												<%
+											}
+											else
+											{
+												%>
+												<h4><span style="color:rgb(0,0,200)">Price : </span><span style="color:rgb(0,200,0)"><%= rsB.getInt(7) %></span></h4>
+												
+												<%
+											}
+										%>
+									</div>
+								</div>
+								<div class="panel-footer">
+									<center>
+									<a href="productDetail.jsp?id=<%= rsB.getInt(1) %>"><button type="button" class="btn btn-info">Buy</button></a>
+									
+									<%
+									ResultSet rsInCart1=table.show("Select ITEM_ID from cart where ITEM_ID="+rsB.getInt(1)+" and USERID="+Integer.parseInt(session.getAttribute("userId").toString()));
+									if(!rsInCart1.next())
+									{
+										%>
+									
+									
+									<button type="button" id="<%= rsB.getInt(1) %>" class="btn btn-info" onClick="addToCart(this.id)">Add to Cart</button>
+									</center>
+										<%
+									}
+									%>
+								</div>
+								
+							</div>
+						</div>
+							<%
+								}
+							}
+							%>
+						
+			</div>
+		</div>
+	</section>
+	
+	<section id="trading">
+		<div class="container">
+			<div class="row" style="border:2px solid rgb(195,195,195)">
+				<div class="col-md-3">
+					<div class="panel" style="margin-top:50%;">
+						<h1> <center>Trending</center></h1>
+						<p style="margin:20px">THIS PRODUCTS IS TRENDING ON THE MARCKET.MOST OF THE CUSTOMERS BOUGHT THIS PRODUCTS.WE RECOMENDED THIS FOR YOU.</p>
+					</div>
+				</div>
+					<%
+							
+							ResultSet rsT=table.show("Select * from product where ID in (select ITEM_ID from orders group by ITEM_ID)");
+							while(rsT.next())
+							{
+								%>
+						<div class="col-md-3" style="margin-top:40px;">
+							<div class="panel panel-primary">
+								<div class="panel-heading" style="height:100px">
+									<h3><%= rsT.getString(2) %></h3>
+								</div>
+								<div class="panel-body">
+									<a href="productDetail.jsp?id=<%= rsT.getInt(1) %>"><center><img class="img img-responsive thumbnail" src="images/product/<%= rsT.getString(10) %>" style="height:200px"/></center></a>
+									<div class="panel" style="height:40px">
+										<%
+											if(rsT.getInt(8)!=0)
+											{
+												%>
+												<h4><span style="color:rgb(0,0,200)">Price : </span><strike style="color:red">Rs.<%= rsT.getInt(7) %></strike>&nbsp;<span style="color:rgb(0,200,0)">Rs.<%=  rsT.getInt(7)-rsT.getInt(8) %></span></h4>
+												</h3><span style="color:rgb(46,4,170)"><%= (100*rsT.getInt(8))/rsT.getInt(7) %>% off</span></h3>
+												<%
+											}
+											else
+											{
+												%>
+												<h4><span style="color:rgb(0,0,200)">Price : </span><span style="color:rgb(0,200,0)"><%= rsT.getInt(7) %></span></h4>
+												
+												<%
+											}
+										%>
+									</div>
+								</div>
+								<div class="panel-footer">
+									<center>
+									<a href="productDetail.jsp?id=<%= rsT.getInt(1) %>"><button type="button" class="btn btn-info">Buy</button></a>
+									
+									<%
+									ResultSet rsInCart=table.show("Select ITEM_ID from cart where ITEM_ID="+rsT.getInt(1)+" and USERID="+Integer.parseInt(session.getAttribute("userId").toString()));
+									if(!rsInCart.next())
+									{
+										%>
+									
+									
+									<button type="button" id="<%= rsT.getInt(1) %>" class="btn btn-info" onClick="addToCart(this.id)">Add to Cart</button>
+									</center>
+										<%
+									}
+									%>
+								</div>
+								
+							</div>
+							
+						</div>
+								<%
+							}
+							
+						%>			
+			</div>
+		</div>
+	</section>
